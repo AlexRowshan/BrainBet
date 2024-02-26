@@ -1,0 +1,14 @@
+version: "2"
+services:
+    310-project:
+        build: .
+        ports:
+            - "8080:8080" # provide direct access to web server
+        stdin_open: true
+        tty: true
+        volumes:
+            - maven-cache:/root/.m2
+            - .:/usr/local/310-project
+
+volumes:
+    maven-cache: {}

@@ -1,0 +1,11 @@
+button {
+  border-radius: 1rem;
+}
+
+button:hover {
+  background-color: lightgray;
+}
+
+button:active {
+  background-color: darkgray;
+}
