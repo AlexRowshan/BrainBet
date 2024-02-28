@@ -1,4 +1,4 @@
-## Brief Architecture Overview and Where Things Go
+## Brief Architecture Overview and Where Things G
 ### React (Frontend)
 All frontend code is to be located in `/site` or a subdirectory. `package.json` contains frontend build configuration and a list of packages your frontend needs to install in order to run. Place top-level pages in `/site/src/pages` and other components in `/site/src/components`.  You will need to download Node.js from https://nodejs.org/ to run the frontend code independently. 
 
