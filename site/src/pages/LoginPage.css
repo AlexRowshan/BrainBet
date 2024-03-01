@@ -1,0 +1,149 @@
+@font-face { font-family: 'TmonMonsori'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/TmonMonsori.woff') format('woff'); font-weight: normal; font-style: normal; }
+
+body{
+    font-family: 'TmonMonsori';
+    position: absolute;
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+    width: 100%; height: 100%;
+    background-color: #ce86f7;
+    font-size: 60px;
+    color: #e600e2;
+}
+.box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align items to the top */
+    align-items: center; /* Center items horizontally */
+    text-align: center; /* Center text specifically, for when flex properties don't apply directly to inline elements or text */
+    height: 100vh;
+    width: 100vw;
+    margin: 0 auto; /* Center the .box itself if needed */
+
+}
+.box span{
+    position: relative;
+    top: 20px;
+    display: inline-block;
+    animation: bounce 0.3s ease infinite alternate;
+    text-shadow: 0 1px #ccc, 0 2px #ccc, 0 3px #ccc, 0 4px #ccc, 0 5px #ccc, 0 6px 0 transparent, 0 7px transparent, 0 8px transparent, 0 9px transparent, 0 10px 10px rgba(0, 0, 0, 0.4);
+}
+@keyframes bounce{
+    100%{
+        top: -20px;
+        text-shadow: 0 1px #ccc,
+        0 2px #ccc,
+        0 3px #ccc,
+        0 4px #ccc,
+        0 5px #ccc,
+        0 6px #ccc,
+        0 7px #ccc,
+        0 8px #ccc,
+        0 9px #ccc,
+        0 50px 25px rgba(0, 0, 0, 0.2);
+    }
+}
+.box span:nth-child(2){
+    animation-delay:0.1s;
+}
+.box span:nth-child(3){
+    animation-delay:0.2s;
+}
+.box span:nth-child(4){
+    animation-delay:0.3s;
+}
+.box span:nth-child(5){
+    animation-delay:0.4s;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 50px;
+    background: #ce86f7;
+    padding-bottom: 30px;
+}
+
+.header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 30px;
+
+}
+.header .text {
+    font-size: 24px; /* Larger font size for the header text */
+    font-weight: bold; /* Makes the header text bold */
+    color: #333; /* Dark color for the text */
+}
+
+.header .underline {
+    height: 2px; /* Sets the height of the underline */
+    width: 60px; /* Sets the width of the underline */
+    background-color: #e600e2; /* Color of the underline */
+    border-radius: 9px;
+}
+
+.inputs{
+    margin-top: 55px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+
+}
+
+.input {
+    display: flex; /* Aligns the icon and input field horizontally */
+    align-items: center; /* Centers items vertically within the input div */
+     margin: auto;
+    width: 480px;
+    height: 80px;
+    background: #e600e2;
+    border-radius: 6px;
+    /* Adds spacing between input fields */
+}
+
+.input img {
+   margin: 0px 30px;
+
+}
+
+.input input {
+    height: 50px;
+    width: 400px; /* Makes the input field take up the remaining space */
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    border: none;
+    font-size: 19px;
+}
+
+.inputs .input input::placeholder {
+    color: black; /* Set placeholder text color to black */
+    font-family: Arial, sans-serif; /* Change font-family to Arial */
+}
+
+.submit-container {
+    display: flex; /* Aligns the submit buttons horizontally */
+    justify-content: space-around; /* Distributes space evenly around the submit buttons */
+}
+
+.submit {
+    cursor: pointer; /* Changes the cursor to a pointer on hover */
+    padding: 10px 20px; /* Adds padding inside the submit buttons */
+    background-color: #e600e2; /* Background color of the submit buttons */
+    color: black; /* Text color of the submit buttons */
+    border-radius: 4px; /* Rounds the corners of the submit buttons */
+    text-align: center; /* Centers the text inside the submit buttons */
+    transition: background-color 0.3s; /* Smooth background color change on hover */
+    font-size: 24px;
+}
+
+.submit:hover {
+    background-color: #e600e2; /* Darkens the submit button background on hover */
+}
+
+
