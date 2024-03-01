@@ -1,15 +1,11 @@
 package edu.usc.csci310.project.user;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QuerySnapshot;
-import com.google.firebase.auth.hash.Bcrypt;
+import com.google.cloud.firestore.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -25,7 +21,7 @@ public class UserService {
     public String createUser(String username, String password)throws ExecutionException, InterruptedException{
         //holds a reference to a firestore collection like a link
         CollectionReference users = firestore.collection("users");
-        //include all documents that meet the query criteria
+        //return a query snapshot that contains document objects that meet the query criteria
         ApiFuture<QuerySnapshot> querySnapshot = users.whereEqualTo("username", username).get();
         if(!querySnapshot.get().getDocuments().isEmpty()){
             throw new IllegalStateException("Username already exists");
@@ -35,4 +31,18 @@ public class UserService {
         ApiFuture<DocumentReference> addedDocRef = users.add(user);
         return addedDocRef.get().getId();
     }
+
+    public boolean signIn(String username, String password) throws ExecutionException, InterruptedException{
+        CollectionReference users = firestore.collection("users");
+        ApiFuture<QuerySnapshot> querySnapshot = users.whereEqualTo("username", username).get();
+        //Each DocumentSnapshot represents a single document from the Firestore database that matched the query
+        List<QueryDocumentSnapshot> documents = querySnapshot.get().getDocuments();
+        if(documents.isEmpty()){
+            throw new IllegalStateException("User does not exist");
+        }
+        User user = documents.get(0).toObject(User.class);
+        return passwordEncoder.matches(password, user.getPassword());
+    }
+
+
 }
