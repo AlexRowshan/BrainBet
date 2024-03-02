@@ -1,19 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/index.css";
+import App from "./App"
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-        <Routes>
-            <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-    </BrowserRouter>
-  </React.StrictMode>
+    <React.StrictMode>
+        {/* Render the web app with a router wrapping it */}
+        <Router>
+            <App />
+        </Router>
+    </React.StrictMode>
 );
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
