@@ -10,6 +10,10 @@ public class User {
         this.password = password;
         this.currency = 100;
     }
+
+    public User() {
+        // Firestore needs this
+    }
     public String getUsername() {
         return username;
     }
