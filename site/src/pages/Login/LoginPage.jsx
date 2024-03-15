@@ -1,9 +1,13 @@
 import React, {useState} from "react";
+import { useNavigate } from 'react-router-dom';
 import  './LoginPage.css'
 import brainCouchImage from './BrainCouch.png';
 import person from './person.png';
 import password from './password.png';
 function LoginPage() {
+
+    const navigate = useNavigate();
+
 
     const [formData, setFormData] = useState({
         username: "",
@@ -30,7 +34,10 @@ function LoginPage() {
             .then(response => response.text())
             .then(data => {
                 if(data === "success"){
-                    alert("Signup was successful!");
+                    const { username } = formData;
+                    sessionStorage.setItem('username', username);
+
+                    navigate("/gameJoinPage");
                 } else{
                     alert("Signup was unsuccessful.");
                 }
@@ -54,7 +61,10 @@ function LoginPage() {
             .then(response => response.text())
             .then(data => {
                 if(data === "success"){
-                    alert("Login was successful!");
+
+                    const { username } = formData;
+                    sessionStorage.setItem('username', username);
+                    navigate("/gameJoinPage");
                 } else{
                     alert("Login was unsuccessful.");
                 }
