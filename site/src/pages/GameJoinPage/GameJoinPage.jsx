@@ -23,10 +23,7 @@ function GameJoinPage() {
         // Assign to current property of the ref
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, frame => {
-            stompClient.current.subscribe('/topic/gameCreated', (gameCreated) => {
-                setGameCode(gameCreated.body);
-                navigate("/gameLobbyPage", { state: { gameCode: gameCreated.body, username: sessionStorage.getItem("username") } });
-            });
+            // Remove the subscription to /topic/gameCreated from here
         });
     };
 
@@ -38,16 +35,23 @@ function GameJoinPage() {
             stompClient.current.send("/app/create", {}, JSON.stringify(createGameRequest));
 
             // Subscribe to game updates after sending the create game request
-            stompClient.current.subscribe('/topic/gameCreated', (gameCreated) => {
+            const subscription = stompClient.current.subscribe('/topic/gameCreated', (gameCreated) => {
                 const createdGameCode = gameCreated.body;
                 setGameCode(createdGameCode);
+
+                // Navigate to the gameLobbyPage with the created game code
+                navigate("/gameLobbyPage", { state: { gameCode: createdGameCode, username: sessionStorage.getItem("username") } });
 
                 // Subscribe to game updates for the created game
                 const gameUpdateTopic = `/topic/gameUpdate/${createdGameCode}`;
                 stompClient.current.subscribe(gameUpdateTopic, (message) => {
                     const session = JSON.parse(message.body);
+                    // Update the participants in the gameLobbyPage state
                     navigate("/gameLobbyPage", { state: { gameCode: session.gameCode, participants: Array.from(session.participants) } });
                 });
+
+                // Unsubscribe from the /topic/gameCreated topic
+                subscription.unsubscribe();
             });
         }
     };
@@ -67,7 +71,6 @@ function GameJoinPage() {
             });
         }
     };
-
     const fetchUserBalance = () => {
         fetch("/balance")
             .then((response) => response.text())
