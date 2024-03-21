@@ -31,9 +31,11 @@ function GameJoinPage() {
     };
 
     const handleCreateGame = () => {
-        // Check if stompClient.current exists before calling methods on it
         if (stompClient.current) {
-            stompClient.current.send("/app/create", {}, JSON.stringify({}));
+            const createGameRequest = {
+                username: sessionStorage.getItem("username")
+            };
+            stompClient.current.send("/app/create", {}, JSON.stringify(createGameRequest));
         }
     };
 
@@ -42,8 +44,18 @@ function GameJoinPage() {
     };
 
     const handleJoinGame = () => {
-        alert("Will implement later");
+        if (stompClient.current && gameCode) {
+            stompClient.current.send("/app/join", {}, JSON.stringify({ gameCode, username: sessionStorage.getItem("username") }));
+            // Subscribe to game updates
+            const gameUpdateTopic = `/topic/gameUpdate/${gameCode}`;
+            stompClient.current.subscribe(gameUpdateTopic, (message) => {
+                const session = JSON.parse(message.body);
+                navigate("/gameLobbyPage", { state: { gameCode: session.gameCode, participants: Array.from(session.participants) } });
+            });
+        }
     };
+
+
     const fetchUserBalance = () => {
         fetch("/balance")
             .then((response) => response.text())
