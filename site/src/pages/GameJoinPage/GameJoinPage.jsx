@@ -36,6 +36,19 @@ function GameJoinPage() {
                 username: sessionStorage.getItem("username")
             };
             stompClient.current.send("/app/create", {}, JSON.stringify(createGameRequest));
+
+            // Subscribe to game updates after sending the create game request
+            stompClient.current.subscribe('/topic/gameCreated', (gameCreated) => {
+                const createdGameCode = gameCreated.body;
+                setGameCode(createdGameCode);
+
+                // Subscribe to game updates for the created game
+                const gameUpdateTopic = `/topic/gameUpdate/${createdGameCode}`;
+                stompClient.current.subscribe(gameUpdateTopic, (message) => {
+                    const session = JSON.parse(message.body);
+                    navigate("/gameLobbyPage", { state: { gameCode: session.gameCode, participants: Array.from(session.participants) } });
+                });
+            });
         }
     };
 
@@ -54,7 +67,6 @@ function GameJoinPage() {
             });
         }
     };
-
 
     const fetchUserBalance = () => {
         fetch("/balance")
