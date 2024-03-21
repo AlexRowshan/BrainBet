@@ -5,13 +5,11 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
 public class GameController {
-
     @Autowired
     private GameSessionService gameSessionService;
 
@@ -38,3 +36,5 @@ public class GameController {
         }
     }
 }
+
+
