@@ -5,6 +5,7 @@ public class CreateGameRequest {
 
     // Default constructor is required for JSON deserialization
     public CreateGameRequest() {
+
     }
 
     // Constructor with all fields
