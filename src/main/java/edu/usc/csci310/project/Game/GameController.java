@@ -35,6 +35,32 @@ public class GameController {
             messagingTemplate.convertAndSend("/topic/gameUpdate/" + joinRequest.getGameCode(), session);
         }
     }
+
+    @MessageMapping("/startGame")
+    public void startGame(@Payload StartGameRequest startGameRequest) {
+        String gameCode = startGameRequest.getGameCode();
+        messagingTemplate.convertAndSend("/topic/gameStart/" + gameCode, "");
+    }
+
+    public static class StartGameRequest {
+        private String gameCode;
+
+        public StartGameRequest() {
+            // Default constructor
+        }
+
+        public StartGameRequest(String gameCode) {
+            this.gameCode = gameCode;
+        }
+
+        public String getGameCode() {
+            return gameCode;
+        }
+
+        public void setGameCode(String gameCode) {
+            this.gameCode = gameCode;
+        }
+    }
 }
 
 
