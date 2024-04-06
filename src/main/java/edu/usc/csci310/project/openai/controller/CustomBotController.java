@@ -24,9 +24,10 @@ private RestTemplate template;
 @GetMapping("/chat")
     public String chat(@RequestParam("prompt") String prompt){
         System.out.println("MODEL VALUE "+model+apiUrl);
-        ChatGPTRequest request = new ChatGPTRequest("gpt-3.5-turbo", prompt);
-        ChatGPTResponse chatGPTResponse= template.postForObject("https://api.openai.com/v1/chat/completions", request, ChatGPTResponse.class);
+        String structuredPrompt = "Give me 10 trivia questions related to " + prompt + " with 4 options each and indicate the correct answer. Format the response as follows: Question: <Question> Options: A) <Option A>, B) <Option B>, C) <Option C>, D) <Option D> Correct Answer: <Correct Option>";
 
+        ChatGPTRequest request = new ChatGPTRequest("gpt-3.5-turbo", structuredPrompt);
+        ChatGPTResponse chatGPTResponse= template.postForObject("https://api.openai.com/v1/chat/completions", request, ChatGPTResponse.class);
         return chatGPTResponse.getChoices().get(0).getMessage().getContent();
-}
+    }
 }

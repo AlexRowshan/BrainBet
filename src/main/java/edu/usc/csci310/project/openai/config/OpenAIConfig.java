@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class OpenAIConfig {
     //TODO: fix application properties
-    private final String openApiKey = "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";
+    private final String openApiKey = "";
     @Bean
     public RestTemplate template(){
         RestTemplate restTemplate = new RestTemplate();
