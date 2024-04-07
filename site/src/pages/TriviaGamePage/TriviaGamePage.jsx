@@ -14,6 +14,7 @@ function TriviaGamePage() {
         // Reset selected answer and timer for each question
         setSelectedAnswer("");
         setTimer(10);
+        console.log("Current question index is " + currentQuestionIndex);
 
         const countdown = setInterval(() => {
             setTimer((prevTimer) => {
@@ -35,10 +36,11 @@ function TriviaGamePage() {
                 setCurrentQuestionIndex(nextQuestionIndex);
             } else {
                 // i didn't do the backend for this
-                navigate("/resultsPage", { state: { score } });
+                //navigate("/gameJoinPage", { state: { score } });
+                navigate("/gameJoinPage");
             }
         }
-    }, [timer, currentQuestionIndex, triviaData.length, score, navigate]);
+    }, [timer]);
 
     const handleAnswerSelect = (option) => {
         setSelectedAnswer(option); // Mark the answer as selected

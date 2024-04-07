@@ -28,6 +28,7 @@ private RestTemplate template;
 
         ChatGPTRequest request = new ChatGPTRequest("gpt-3.5-turbo", structuredPrompt);
         ChatGPTResponse chatGPTResponse= template.postForObject("https://api.openai.com/v1/chat/completions", request, ChatGPTResponse.class);
+
         return chatGPTResponse.getChoices().get(0).getMessage().getContent();
     }
 }
