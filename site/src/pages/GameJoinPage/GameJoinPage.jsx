@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SockJS from 'sockjs-client';
@@ -39,6 +40,9 @@ function GameJoinPage() {
                 const createdGameCode = gameCreated.body;
                 setGameCode(createdGameCode);
 
+                // Set the host status in the session storage
+                sessionStorage.setItem("isHost", "true");
+
                 // Navigate to the gameLobbyPage with the created game code
                 navigate("/gameLobbyPage", { state: { gameCode: createdGameCode, username: sessionStorage.getItem("username") } });
 
@@ -71,6 +75,7 @@ function GameJoinPage() {
             });
         }
     };
+
     const fetchUserBalance = () => {
         fetch("/balance")
             .then((response) => response.text())

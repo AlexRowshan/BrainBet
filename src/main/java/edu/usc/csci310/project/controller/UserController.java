@@ -40,6 +40,7 @@ public class UserController {
         catch (Exception e){
             return e.getMessage();
         }
+        //Todo: Put inside the try?
         return "success";
     }
 }
