@@ -15,6 +15,7 @@ function GameLobbyPage() {
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
             const gameStartTopic = `/topic/gameStart/${gameCode}`;
+            sessionStorage.setItem('gameCode', gameCode);
             stompClient.current.subscribe(gameStartTopic, (message) => {
                 const triviaData = JSON.parse(message.body);
                 navigate("/triviaGamePage", { state: { triviaData } });

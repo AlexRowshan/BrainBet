@@ -1,4 +1,4 @@
-package edu.usc.csci310.project.controller;
+package edu.usc.csci310.project.Game;
 import edu.usc.csci310.project.user.User;
 import edu.usc.csci310.project.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

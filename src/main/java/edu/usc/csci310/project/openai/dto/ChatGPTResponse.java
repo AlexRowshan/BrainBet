@@ -21,5 +21,9 @@ public class ChatGPTResponse {
 
 
     }
+    public List<Choice> getChoices() {
+        return choices;
+    }
+
 
 }

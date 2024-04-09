@@ -35,9 +35,31 @@ function TriviaGamePage() {
             if (nextQuestionIndex < triviaData.length) {
                 setCurrentQuestionIndex(nextQuestionIndex);
             } else {
-                // i didn't do the backend for this
-                //navigate("/gameJoinPage", { state: { score } });
-                navigate("/gameJoinPage");
+                // Fetch, send score, username, game code, sort in backend
+                const gameCode = sessionStorage.getItem('gameCode');
+                console.log(gameCode);
+                const userName = sessionStorage.getItem('username');
+                console.log(userName);
+                const userScore = score;
+                console.log(userScore);
+
+                fetch(`/api/game/${gameCode}/score`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userName, userScore }),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Handle the response from the backend
+                    console.log('Leaderboard data:', data);
+                    navigate("/gameLeaderboardPage", { state: { score } });
+                })
+                .catch((error) => {
+                    console.error('Error submitting score:', error);
+                    navigate("/gameLeaderboardPage", { state: { score } });
+                });
             }
         }
     }, [timer]);
