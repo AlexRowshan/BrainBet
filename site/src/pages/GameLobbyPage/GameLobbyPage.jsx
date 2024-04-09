@@ -15,8 +15,9 @@ function GameLobbyPage() {
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
             const gameStartTopic = `/topic/gameStart/${gameCode}`;
-            stompClient.current.subscribe(gameStartTopic, () => {
-                navigate("/triviaGamePage");
+            stompClient.current.subscribe(gameStartTopic, (message) => {
+                const triviaData = JSON.parse(message.body);
+                navigate("/triviaGamePage", { state: { triviaData } });
             });
         });
 
@@ -35,7 +36,11 @@ function GameLobbyPage() {
 
     const handleStartGame = () => {
         if (stompClient.current) {
-            stompClient.current.send("/app/startGame", {}, JSON.stringify({ gameCode }));
+            const payload = JSON.stringify({
+                gameCode: gameCode,
+                prompt: prompt
+            });
+            stompClient.current.send("/app/startGame", {}, payload);
         }
     };
 
