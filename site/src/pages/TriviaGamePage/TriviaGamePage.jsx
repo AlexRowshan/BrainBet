@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
 
 function TriviaGamePage() {
     const location = useLocation();
@@ -35,9 +37,25 @@ function TriviaGamePage() {
             if (nextQuestionIndex < triviaData.length) {
                 setCurrentQuestionIndex(nextQuestionIndex);
             } else {
-                // i didn't do the backend for this
-                //navigate("/gameJoinPage", { state: { score } });
-                navigate("/gameJoinPage");
+                const gameCode = sessionStorage.getItem('gameCode');
+                const username = sessionStorage.getItem('username');
+                const scoreData = {
+                    gameCode: gameCode,
+                    username: username,
+                    score: score
+                };
+
+                // Establish WebSocket connection and send game result data
+                const socket = new SockJS('http://localhost:8080/ws');
+                const stompClient = Stomp.over(socket);
+                stompClient.connect({}, () => {
+                    console.log('WebSocket connected in TriviaGamePage');
+                    stompClient.send("/app/gameResult", {}, JSON.stringify(scoreData));
+                    stompClient.disconnect(() => {
+                        console.log('WebSocket disconnected in TriviaGamePage');
+                        navigate("/gameLeaderboardPage");
+                    });
+                });
             }
         }
     }, [timer]);
