@@ -90,29 +90,35 @@ function GameJoinPage() {
 
     return (
         <div>
-            <div className="bg"></div>
-            <div className="star-field">
-                <div className="layer"></div>
-                <div className="layer"></div>
-                <div className="layer"></div>
-            </div>
+            <div className="center-image">
+            <div className="content"></div>
+                <div className="glass">
+            {/*<div className="star-field">*/}
+            {/*    <div className="layer"></div>*/}
+            {/*    <div className="layer"></div>*/}
+            {/*    <div className="layer"></div>*/}
+            {/*</div>*/}
             <b>Hello {username}</b>
             <button type="button" className="button" onClick={handleCreateGame}>
                 Create Game
             </button>
-            <div className="join-game-container">
-                <input
-                    type="text"
-                    placeholder="Enter Game Code"
-                    value={gameCode}
-                    onChange={handleGameCodeChange}
-                />
-                <button type="button" className="button" onClick={handleJoinGame}>
-                    Join Game
-                </button>
+                    <div className="join-game-container">
+                        <button type="button" className="button" onClick={handleJoinGame}>
+                            Join Game
+                        </button>
+                        <input
+                            type="text"
+                            id="joinpagetextbox"
+                            placeholder="Enter Game Code"
+                            value={gameCode}
+                            onChange={handleGameCodeChange}
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     );
+
 }
 
 export default GameJoinPage;
