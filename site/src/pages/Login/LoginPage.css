@@ -77,7 +77,8 @@ input::placeholder {
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     padding: 0 20px;
-    box-shadow: 0 3px 6px #a82cf2;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+
     /*opacity: 0.5;*/
     outline: none;
     border: none;
@@ -109,7 +110,8 @@ input::placeholder {
     transition: background-color 0.3s;
     background-color: rgba(168, 44, 242, 0.57);
     border: none;
-    box-shadow: 0 3px 6px #a82cf2;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+
 }
 
 .submit:hover {
@@ -123,12 +125,12 @@ input::placeholder {
     text-align: center;
 }
 
-.header .underline {
-    height: 2px;
-    width: 60px;
-    border-radius: 9px;
-    background-color: #e600e2;
-}
+/*.header .underline {*/
+/*    height: 2px;*/
+/*    width: 60px;*/
+/*    border-radius: 9px;*/
+/*    background-color: #e600e2;*/
+/*}*/
 
 
 .center-image {
@@ -145,3 +147,9 @@ input::placeholder {
     border-radius: 40px;
     box-shadow: inset 0 0 20px #000000;
 }
+
+input[type="text"]#joinpagetextbox::placeholder {
+    color: gray; /* Or any color that provides sufficient contrast */
+    opacity: 1; /* Ensures the placeholder is fully opaque */
+}
+
