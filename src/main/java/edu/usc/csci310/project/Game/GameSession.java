@@ -18,7 +18,6 @@ public class GameSession {
         participants.add(participant);
     }
 
-
     // Getters
     public String getGameCode() {
         return gameCode;
