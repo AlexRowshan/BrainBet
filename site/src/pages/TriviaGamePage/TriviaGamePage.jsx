@@ -78,6 +78,7 @@ function TriviaGamePage() {
     const currentQuestion = triviaData[currentQuestionIndex];
 
     return (
+        <div className="center-image-trivia">
         <div>
             <h2>Trivia Game</h2>
             <p>Score: {score}</p>
@@ -98,6 +99,7 @@ function TriviaGamePage() {
                     ))}
                 </ul>
             </div>
+        </div>
         </div>
     );
 }

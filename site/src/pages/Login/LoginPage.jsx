@@ -92,7 +92,6 @@ function LoginPage() {
                                 <img src={brain} alt="Additional Image"
                                      style={{width: '100px', height: 'auto', marginBottom:'30px'}}/>
                             </div>
-                        </div>
                         <div className="container">
                             {/*<div className="header">*/}
                             {/*        <div className="text">Sign Up</div>*/}
@@ -115,6 +114,7 @@ function LoginPage() {
                                     <div className="submit" onClick={handleLoginClick}>Login</div>
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>
