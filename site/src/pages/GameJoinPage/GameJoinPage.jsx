@@ -109,7 +109,7 @@ function GameJoinPage() {
                         <input
                             type="text"
                             id="joinpagetextbox"
-                            placeholder="Enter Game Code"
+                            placeholder="Enter Game Code (ALL CAPS)"
                             value={gameCode}
                             onChange={handleGameCodeChange}
                         />
