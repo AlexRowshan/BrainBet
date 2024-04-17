@@ -1,0 +1,42 @@
+/* TriviaGamePage.css */
+
+/* Button default style */
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    background-color: blue; /* Default background color */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+/* Button hover style */
+.button:hover {
+    background-color: darkblue; /* Color changes on hover */
+}
+
+/* Button disabled style */
+.button:disabled {
+    background-color: grey; /* Grey color when button is disabled */
+    cursor: default; /* Changes cursor to default to indicate button is not clickable */
+}
+
+/* Correct answer button style */
+.correctAnswer {
+    background-color: green; /* Green background for correct answer */
+}
+
+/* Wrong answer button style */
+.wrongAnswer {
+    background-color: red; /* Red background for wrong answers */
+}
+
+/* Ensure correct and wrong answers remain visible even when disabled */
+.button:disabled.correctAnswer {
+    background-color: #22b522; /* slightly different green to denote disabled but correct */
+}
+
+.button:disabled.wrongAnswer {
+    background-color: #b52222; /* slightly different red to denote disabled but incorrect */
+}
