@@ -3,7 +3,6 @@ package edu.usc.csci310.project.Game;
 public class JoinRequest {
     private String gameCode;
     private String username;
-
     // Getters
     public String getGameCode() {
         return gameCode;
@@ -12,6 +11,8 @@ public class JoinRequest {
     public String getUsername() {
         return username;
     }
+
+
 
     // Setters
     public void setGameCode(String gameCode) {

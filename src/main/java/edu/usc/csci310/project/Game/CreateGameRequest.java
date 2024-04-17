@@ -2,7 +2,7 @@ package edu.usc.csci310.project.Game;
 
 public class CreateGameRequest {
     private String username;
-
+    private float wager;
     // Default constructor is required for JSON deserialization
     public CreateGameRequest() {
 
@@ -21,5 +21,13 @@ public class CreateGameRequest {
     // Setter
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public float getWager() {
+        return wager;
+    }
+
+    public void setWager(float wager) {
+        this.wager = wager;
     }
 }

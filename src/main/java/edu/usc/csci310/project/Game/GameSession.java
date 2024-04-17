@@ -7,11 +7,12 @@ public class GameSession {
     private final String gameCode;
     private final String host;
     private final Set<String> participants = new HashSet<>();
-
-    public GameSession(String gameCode, String host) {
+    private final float wager;
+    public GameSession(String gameCode, String host, Float wager) {
         this.gameCode = gameCode;
         this.host = host;
         this.participants.add(host); // Host also a participant
+        this.wager = wager;
     }
 
     public void addParticipant(String participant) {
@@ -29,5 +30,9 @@ public class GameSession {
 
     public Set<String> getParticipants() {
         return participants;
+    }
+
+    public float getWager() {
+        return wager;
     }
 }
