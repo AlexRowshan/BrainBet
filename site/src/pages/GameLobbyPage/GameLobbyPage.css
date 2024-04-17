@@ -88,9 +88,9 @@ html, body {
 }
 .participant-icon {
     display: inline-block;
-    width: 60px;         /* Increased size */
-    height: 60px;        /* Increased size */
-    line-height: 60px;   /* Adjusted for vertical alignment */
+    width: 100px;         /* Increased size */
+    height: 100px;        /* Increased size */
+    line-height: 80px;   /* Adjusted for vertical alignment */
     text-align: center;  /* Align text horizontally */
     background-color: #6a1b9a; /* Default purple, will override dynamically */
     color: white;
@@ -100,4 +100,7 @@ html, body {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-size: 14px;
+    white-space: normal;
+    word-wrap: break-word;
 }

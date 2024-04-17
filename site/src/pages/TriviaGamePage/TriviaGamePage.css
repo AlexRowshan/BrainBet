@@ -40,3 +40,19 @@
 .button:disabled.wrongAnswer {
     background-color: #b52222; /* slightly different red to denote disabled but incorrect */
 }
+
+
+.center-image-trivia {
+    z-index: 1;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100vw - 80px);
+    height: calc(100vh - 80px);
+    background-image: url(triviabackground.png);
+    background-size: cover;
+    background-position: center;
+    border-radius: 40px;
+    box-shadow: inset 0 0 20px #000000;
+}
