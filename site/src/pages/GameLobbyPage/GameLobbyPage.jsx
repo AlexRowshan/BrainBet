@@ -5,11 +5,12 @@ import { Stomp } from '@stomp/stompjs';
 
 function GameLobbyPage() {
     const location = useLocation();
-    const { gameCode, participants } = location.state || {};
+    const { gameCode, participants, wager } = location.state || {};
     const [prompt, setPrompt] = useState("");
     const navigate = useNavigate();
     const stompClient = useRef(null);
-
+    // console.log("this is the wager")
+    // console.log(wager)
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws');
         stompClient.current = Stomp.over(socket);
