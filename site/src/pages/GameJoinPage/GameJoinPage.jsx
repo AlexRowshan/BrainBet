@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import "./GameJoinPage.css";
+import {bool} from "yup";
 
 
 function GameJoinPage() {
@@ -85,39 +86,39 @@ function GameJoinPage() {
     };
 
     const handleJoinGame = () => {
+        let error = false;
         if (stompClient.current && gameCode) {
             // Send join request
+
             stompClient.current.send("/app/join", {}, JSON.stringify({ gameCode, username: sessionStorage.getItem("username") }));
 
-            // Subscribe to error messages
-            const errorTopic = `/user/queue/errors/${sessionStorage.getItem("username")}`;
-            console.log("hehehehehehe");
-            console.log(errorTopic);
-            stompClient.current.subscribe(errorTopic, (message) => {
-                console.log("Received an error message");
-                try {
-                    const errorResponse = JSON.parse(message.body);
-                    alert(errorResponse.message);
-                } catch (e) {
-                    console.error("Error parsing error response:", e);
-                    alert("An error occurred while joining the game. Please try again later.");
+            const gameUpdateTopic = `/topic/gameUpdate/${gameCode}`;
+            let error = false;
+            const gameUpdateSubscription = stompClient.current.subscribe(gameUpdateTopic, (message) => {
+                console.log("Received a game update");
+
+                if (message.body === "{\"error\": \"Not enough coin!\"}") {
+                    error = true;
+                    gameUpdateSubscription.unsubscribe();
+                    alert("Not enough coin!");
+
+                }
+                 else {
+                    const session = JSON.parse(message.body);
+                    console.log("Navigating to game lobby page");
+
+                    // Check if session.participants exists before converting to an array
+                    const participants = session.participants ? Array.from(session.participants) : [];
+
+                    navigate("/gameLobbyPage", { state: { gameCode: session.gameCode, participants } });
+                    gameUpdateSubscription.unsubscribe();
                 }
             });
 
-            // Handle game updates if joined successfully
-            const gameUpdateTopic = `/topic/gameUpdate/${gameCode}`;
-            stompClient.current.subscribe(gameUpdateTopic, (message) => {
-                console.log("Received a game update");
-                const session = JSON.parse(message.body);
-                if (session) {
-                    console.log("Navigating to game lobby page");
-                    navigate("/gameLobbyPage", { state: { gameCode: session.gameCode, participants: Array.from(session.participants) } });
-                } else {
-                    console.log("Error joining the game:", message.body);
-                    alert("Error joining the game. Please try again.");
-                }
-            });
+            console.log("Error is " + error);
+
         }
+
     };
 
 
@@ -144,7 +145,7 @@ function GameJoinPage() {
     return (
         <div>
             <div className="center-image">
-            <div className="content"></div>
+                <div className="content"></div>
                 <div className="glass">
                     {/*<div className="star-field">*/}
                     {/*    <div className="layer"></div>*/}

@@ -53,11 +53,15 @@ public class GameController {
                 // Successfully joined the game
                 messagingTemplate.convertAndSend("/topic/gameUpdate/" + joinRequest.getGameCode(), session);
             }
+            else{
+                String jsonErrorMessage = "{\"error\": \"Invalid Game Code!\"}";
+                messagingTemplate.convertAndSend("/topic/gameUpdate/" + joinRequest.getGameCode(), jsonErrorMessage);
+            }
         } else {
             System.out.println("You are not enough money to join the game.");
-            String errorMessage = "Insufficient balance to join the game.";
-            System.out.println("/user/queue/errors/" + joinRequest.getUsername());
-            messagingTemplate.convertAndSend("/user/queue/errors/" + joinRequest.getUsername(), errorMessage);
+            //String errorMessage = "Insufficient balance to join the game.";
+            String jsonErrorMessage = "{\"error\": \"Not enough coin!\"}";
+            messagingTemplate.convertAndSend("/topic/gameUpdate/" + joinRequest.getGameCode(), jsonErrorMessage);
         }
     }
 
