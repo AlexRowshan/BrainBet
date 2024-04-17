@@ -122,4 +122,14 @@ input[type="text"]#joinpagetextbox {
     flex-direction: column;
     align-items: center;
 }
+.wager-slider-container {
+    margin: 20px;
+}
+
+.wager-slider {
+    width: 100%;
+    cursor: pointer;
+}
+
+
 

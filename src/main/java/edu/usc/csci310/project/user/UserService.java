@@ -44,5 +44,17 @@ public class UserService {
         return passwordEncoder.matches(password, user.getPassword());
     }
 
+    public float getWagerAmount(String username) throws ExecutionException, InterruptedException {
+        CollectionReference users = firestore.collection("users");
+        ApiFuture<QuerySnapshot> future = users.whereEqualTo("username", username).get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        if (documents.isEmpty()) {
+            throw new IllegalStateException("User not found");
+        }
+        User user = documents.get(0).toObject(User.class);
+        return user.getCurrency();
+    }
+
+
 
 }

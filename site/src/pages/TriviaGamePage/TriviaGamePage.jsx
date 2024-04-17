@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
+import './TriviaGamePage.css';
+
 
 function TriviaGamePage() {
     const location = useLocation();
@@ -87,11 +89,8 @@ function TriviaGamePage() {
                         <li key={index} style={{ margin: '10px 0' }}>
                             <button
                                 onClick={() => handleAnswerSelect(option)}
-                                disabled={selectedAnswer !== ""} // Disable the button if an answer has been selected
-                                style={{
-                                    backgroundColor: selectedAnswer === option ? (option === currentQuestion.correctAnswer ? 'green' : 'red') : '',
-                                    color: 'white',
-                                }}
+                                disabled={selectedAnswer !== ""}
+                                className={`button ${selectedAnswer === option ? (option === currentQuestion.correctAnswer ? 'correctAnswer' : 'wrongAnswer') : ''}`}
                             >
                                 {option}
                             </button>
