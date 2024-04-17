@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -54,6 +55,24 @@ public class UserService {
         User user = documents.get(0).toObject(User.class);
         return user.getCurrency();
     }
+
+    //Updating scores
+    public void updateCurrency(Map<String, Integer> scores) throws ExecutionException, InterruptedException {
+        for (Map.Entry<String, Integer> entry : scores.entrySet()){
+            CollectionReference users = firestore.collection("users");
+            ApiFuture<QuerySnapshot> querySnapshot = users.whereEqualTo("username", entry.getKey()).get();
+            List<QueryDocumentSnapshot> documents = querySnapshot.get().getDocuments();
+            if (documents.isEmpty()) {
+                throw new IllegalStateException("User does not exist");
+            }
+            DocumentSnapshot documentSnapshot = documents.get(0);
+            User user = documentSnapshot.toObject(User.class);
+            int newCurrency = user.getCurrency() + entry.getValue();
+            DocumentReference userDocRef = documentSnapshot.getReference();
+            userDocRef.update("currency", newCurrency);
+        }
+    }
+
 
 
 

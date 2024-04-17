@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -42,6 +43,10 @@ public class UserController {
         }
         //Todo: Put inside the try?
         return "success";
+    }
+    @PostMapping("/updatecurrency")
+    public void updateCurrency(@RequestBody Map<String, Integer> scores) throws ExecutionException, InterruptedException {
+        userService.updateCurrency(scores);
     }
 
 
