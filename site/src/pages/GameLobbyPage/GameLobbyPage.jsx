@@ -63,7 +63,7 @@ function GameLobbyPage() {
                 <h2>Game Lobby</h2>
                 {gameCode && <p>Game Code: {gameCode}</p>}
                 <h3>Participants:</h3>
-                <ul>
+                <ul className="participants-container">
                     {participants && participants.map((participant, index) => (
                         <li key={index}>
                             <div className="participant-icon"
