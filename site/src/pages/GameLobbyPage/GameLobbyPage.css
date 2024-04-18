@@ -57,7 +57,7 @@ html, body {
 }
 
 .button-start-game {
-    background-color: rgba(255, 255, 255, 0.5); /* White transparent background */
+    background-color: rgb(186, 0, 255); /* White transparent background */
     color: #ffffff;                             /* Full-white text color */
     border: 2px solid transparent;              /* Transparent border initially */
     border-radius: 10px;                        /* Rounded corners */
@@ -87,17 +87,29 @@ html, body {
     /* Other styles from previous configurations */
 }
 .participant-icon {
-    display: inline-block;
-    width: 60px;         /* Increased size */
-    height: 60px;        /* Increased size */
-    line-height: 60px;   /* Adjusted for vertical alignment */
-    text-align: center;  /* Align text horizontally */
-    background-color: #6a1b9a; /* Default purple, will override dynamically */
+    width: 100px; /* Adjust width to fit within the column width */
+    height: 100px; /* Ensure the height is less than the row height to accommodate margins/paddings */
+    line-height: 100px; /* Align text vertically */
+    text-align: center; /* Center text horizontally */
+    background-color: #6a1b9a; /* Default purple, overridden dynamically */
     color: white;
     border-radius: 50%;
-    margin: 5px;
-    font-size: 16px;     /* Adjusted text size */
+    margin: auto; /* Center within the grid cell */
+    font-size: 14px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+
+.participants-container {
+    display: grid;
+    grid-auto-flow: column; /* Directs the grid to fill items column by column */
+    grid-template-rows: repeat(2, 120px); /* Create exactly two rows, each 120px high */
+    grid-auto-columns: 100px; /* Width of each column */
+    gap: 10px; /* Space between items */
+    overflow-x: auto; /* Enables horizontal scrolling if more columns are needed */
+}
+
+
+
