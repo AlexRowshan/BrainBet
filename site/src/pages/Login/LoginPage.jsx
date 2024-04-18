@@ -6,10 +6,6 @@ import brain from './brain.png';
 
 
 
-import person from './person.png';
-import password from './password.png';
-
-
 function LoginPage() {
 
     const navigate = useNavigate();
@@ -81,23 +77,22 @@ function LoginPage() {
 
     return (
         <>
-                <div className="background-container">
-                    <div className="center-image">
-                        <div className="box">
-                            <div> {/* Wrapper div for text, optional depending on desired spacing */}
-                                <img src={brainbetlogo} alt="BRAINBET"
-                                     style={{width: '500px', height: 'auto', marginTop: '80px'}}/>
-                            </div>
-                            <div>
-                                <img src={brain} alt="Additional Image"
-                                     style={{width: '100px', height: 'auto', marginBottom:'30px'}}/>
-                            </div>
+            <div className="background-container">
+                <div className="center-image">
+                    <div className="box">
+                        <div> {/* Wrapper div for text, optional depending on desired spacing */}
+                            <img src={brainbetlogo} alt="BRAINBET"
+                                 style={{width: '500px', height: 'auto', marginTop: '80px'}}/>
+                        </div>
+                        <div>
+                            <img src={brain} alt="Additional Image"
+                                 style={{width: '100px', height: 'auto', marginBottom:'30px'}}/>
                         </div>
                         <div className="container">
                             {/*<div className="header">*/}
                             {/*        <div className="text">Sign Up</div>*/}
                             {/*        <div className="underline"></div>*/}
-                        {/*    </div>*/}
+                            {/*    </div>*/}
                             <div className="inputs">
                                 <div className="input">
                                     {/*<img src={person} alt="person"/>*/}
@@ -118,6 +113,7 @@ function LoginPage() {
                         </div>
                     </div>
                 </div>
+            </div>
         </>
 
     );

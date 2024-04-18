@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import "./GameJoinPage.css";
-import {bool} from "yup";
+
 
 
 function GameJoinPage() {

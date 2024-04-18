@@ -11,8 +11,6 @@ input, button, select, textarea {
 
 html, body {
     font-family: 'LocalFontName', "Broken Console";
-    margin: 0;
-    padding: 0;
     height: 100%;
     width: 100%;
     overflow: hidden;
@@ -24,14 +22,13 @@ html, body {
 }
 
 .box {
-    position: absolute;
-    top: 30px;
+    display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    width: 100vw;
-    height: 100vh;
-    margin: 0 auto;
+    width: 90%;
+    max-width: 500px;
+    margin-bottom: 100px;
 }
 
 .container, .header, .inputs, .input {
@@ -43,7 +40,8 @@ html, body {
 }
 
 .inputs {
-    margin-top: 170px;
+    margin-top: 5px;
+    width: 100%;
 }
 
 input::placeholder {
@@ -58,9 +56,10 @@ input::placeholder {
     color: #FFFFFF;
     background: transparent;
     display: flex;
+    flex-direction: column;
     align-items: center;
     width: 350px;
-    height: 80px;
+    /*height: 80px;*/
     border-radius: 10px;
     margin: 10px 0;
     z-index: 2;
@@ -68,7 +67,6 @@ input::placeholder {
 
 
 .input input {
-    height: 50px;
     width: 100%;
     border-radius: 30px;
     color: #ffffff;
@@ -76,9 +74,8 @@ input::placeholder {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    padding: 0 20px;
+    padding: 12px 20px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-
     /*opacity: 0.5;*/
     outline: none;
     border: none;
@@ -93,9 +90,9 @@ input::placeholder {
 .submit-container {
     display: flex;
     justify-content: center;
-    gap: 20px;
     padding-top: 40px;
     z-index: 2;
+    margin-top: 20px;
 }
 
 
@@ -134,7 +131,8 @@ input::placeholder {
 
 
 .center-image {
-    z-index: 1;
+    position: absolute;
+    z-index: -1;
     margin: 20px;
     display: flex;
     justify-content: center;
@@ -153,3 +151,14 @@ input[type="text"]#joinpagetextbox::placeholder {
     opacity: 1; /* Ensures the placeholder is fully opaque */
 }
 
+
+.background-container {
+    width: 100vw;  /* Adding padding while considering the full viewport width */
+    height: 100vh; /* Same for height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Needed for absolute positioning inside */
+    padding: 20px;  /* Padding around the outer container */
+}
