@@ -6,10 +6,6 @@ import brain from './brain.png';
 
 
 
-import person from './person.png';
-import password from './password.png';
-
-
 function LoginPage() {
 
     const navigate = useNavigate();
@@ -96,7 +92,7 @@ function LoginPage() {
                             {/*<div className="header">*/}
                             {/*        <div className="text">Sign Up</div>*/}
                             {/*        <div className="underline"></div>*/}
-                        {/*    </div>*/}
+                            {/*    </div>*/}
                             <div className="inputs">
                                 <div className="input">
                                     {/*<img src={person} alt="person"/>*/}
@@ -118,6 +114,7 @@ function LoginPage() {
                         </div>
                     </div>
                 </div>
+            </div>
         </>
 
     );

@@ -6,6 +6,7 @@ import { Stomp } from '@stomp/stompjs';
 import "./GameJoinPage.css";
 
 
+
 function GameJoinPage() {
     const [username, setUsername] = useState("");
     const [gameCode, setGameCode] = useState("");
