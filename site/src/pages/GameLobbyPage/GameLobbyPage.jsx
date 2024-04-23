@@ -7,10 +7,11 @@ import './GameLobbyPage.css';
 
 function GameLobbyPage() {
     const location = useLocation();
-    const { gameCode, participants } = location.state || {};
+    const { gameCode, participants, wager } = location.state || {};
     const [prompt, setPrompt] = useState("");
     const navigate = useNavigate();
     const stompClient = useRef(null);
+    
 
     function getShadeOfPurple(index, totalParticipants) {
         const hue = 260 + (30 * index / totalParticipants) % 30; // Keeping hue within a tighter purple range
@@ -18,7 +19,6 @@ function GameLobbyPage() {
         const lightness = 30 + 10 * (index % 7); // More subtle gradient in lightness
         return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
     }
-
 
 
     useEffect(() => {

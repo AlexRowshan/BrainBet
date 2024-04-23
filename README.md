@@ -1,7 +1,3 @@
-# 310 Project Repository Information
-
-This is the repository for the 310 group project.  This basic skeleton provides two initial branches:  **documentation** is for the group's Scrum process documentation, and **main** is the primary branch for development work as described in the project manual. 
-
 ## Brief Architecture Overview and Where Things Go
 ### React (Frontend)
 All frontend code is to be located in `/site` or a subdirectory. `package.json` contains frontend build configuration and a list of packages your frontend needs to install in order to run. Place top-level pages in `/site/src/pages` and other components in `/site/src/components`.  You will need to download Node.js from https://nodejs.org/ to run the frontend code independently. 

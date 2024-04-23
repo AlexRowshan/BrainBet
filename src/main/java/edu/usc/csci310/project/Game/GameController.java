@@ -1,4 +1,5 @@
 package edu.usc.csci310.project.Game;
+import edu.usc.csci310.project.user.UserService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -6,11 +7,11 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.ErrorResponse;
 
 @Controller
 public class GameController {
@@ -23,23 +24,44 @@ public class GameController {
     @Autowired
     private ChatGptService chatGptService;
 
+    @Autowired
+    private UserService userService;
+
     @MessageMapping("/create")
     @SendTo("/topic/gameCreated")
     public String createGame(@Payload CreateGameRequest createGameRequest) {
         System.out.println("Creating game...");
         String username = createGameRequest.getUsername();
-        String gameCode = gameSessionService.createGameSession(username + " (Host)");
+        float wager = createGameRequest.getWager();
+        String gameCode = gameSessionService.createGameSession(username + " (Host)", wager);
         System.out.println("Generated game code: " + gameCode);
         return gameCode;
     }
 
     @MessageMapping("/join")
-    public void joinGame(@Payload JoinRequest joinRequest, SimpMessageHeaderAccessor headerAccessor) {
-        boolean success = gameSessionService.joinGameSession(joinRequest.getGameCode(), joinRequest.getUsername());
-        if (success) {
-            // Send an update to all participants of the game
-            GameSession session = gameSessionService.getGameSession(joinRequest.getGameCode());
-            messagingTemplate.convertAndSend("/topic/gameUpdate/" + joinRequest.getGameCode(), session);
+    public void joinGame(@Payload JoinRequest joinRequest, SimpMessageHeaderAccessor headerAccessor) throws ExecutionException, InterruptedException {
+        GameSession session = gameSessionService.getGameSession(joinRequest.getGameCode());
+        System.out.println("this is the session");
+        System.out.println(session);
+        float userBalance = userService.getWagerAmount(joinRequest.getUsername());
+        System.out.println(userBalance);
+        System.out.println(session.getWager());
+        if (userBalance >= session.getWager()) {
+            System.out.println("hi we are here");
+            boolean success = gameSessionService.joinGameSession(joinRequest.getGameCode(), joinRequest.getUsername());
+            if (success) {
+                // Successfully joined the game
+                messagingTemplate.convertAndSend("/topic/gameUpdate/" + joinRequest.getGameCode(), session);
+            }
+            else{
+                String jsonErrorMessage = "{\"error\": \"Invalid Game Code!\"}";
+                messagingTemplate.convertAndSend("/topic/gameUpdate/" + joinRequest.getGameCode(), jsonErrorMessage);
+            }
+        } else {
+            System.out.println("You are not enough money to join the game.");
+            //String errorMessage = "Insufficient balance to join the game.";
+            String jsonErrorMessage = "{\"error\": \"Not enough coin!\"}";
+            messagingTemplate.convertAndSend("/topic/gameUpdate/" + joinRequest.getGameCode(), jsonErrorMessage);
         }
     }
 
@@ -97,6 +119,7 @@ public class GameController {
             this.prompt = prompt;
         }
     }
+
 
 
 }

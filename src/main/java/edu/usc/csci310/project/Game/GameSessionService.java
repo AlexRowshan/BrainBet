@@ -9,9 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameSessionService {
     private final Map<String, GameSession> sessions = new ConcurrentHashMap<>();
 
-    public String createGameSession(String host) {
+    public String createGameSession(String host, Float wager) {
         String gameCode = generateGameCode();
-        sessions.put(gameCode, new GameSession(gameCode, host));
+        sessions.put(gameCode, new GameSession(gameCode, host, wager));
         return gameCode;
     }
 
@@ -25,6 +25,7 @@ public class GameSessionService {
     }
 
     public GameSession getGameSession(String gameCode) {
+
         return sessions.get(gameCode);
     }
 
