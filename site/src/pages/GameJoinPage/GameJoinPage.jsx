@@ -111,7 +111,7 @@ function GameJoinPage() {
                     const participants = session.participants ? Array.from(session.participants) : [];
 
                     navigate("/gameLobbyPage", { state: { gameCode: session.gameCode, participants } });
-                    gameUpdateSubscription.unsubscribe();
+                    // gameUpdateSubscription.unsubscribe();
                 }
             });
 
