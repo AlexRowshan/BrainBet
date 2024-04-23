@@ -8,7 +8,7 @@ import './TriviaGamePage.css';
 function TriviaGamePage() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { triviaData } = location.state || {};
+    const { triviaData, wager } = location.state || {};
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
     const [timer, setTimer] = useState(10);
@@ -44,7 +44,7 @@ function TriviaGamePage() {
                 const scoreData = {
                     gameCode: gameCode,
                     username: username,
-                    score: score
+                    score: score,
                 };
 
                 // Establish WebSocket connection and send game result data
@@ -55,7 +55,7 @@ function TriviaGamePage() {
                     stompClient.send("/app/gameResult", {}, JSON.stringify(scoreData));
                     stompClient.disconnect(() => {
                         console.log('WebSocket disconnected in TriviaGamePage');
-                        navigate("/gameLeaderboardPage");
+                        navigate("/gameLeaderboardPage", { state: { wager: wager } });
                     });
                 });
             }
@@ -79,29 +79,32 @@ function TriviaGamePage() {
 
     return (
         <div className="center-image-trivia">
-        <div>
-            <h2>Trivia Game</h2>
-            <p>Score: {score}</p>
-            <p>Timer: {timer}</p>
             <div>
-                <p>{currentQuestion.question}</p>
-                <ul>
-                    {currentQuestion.options.map((option, index) => (
-                        <li key={index} style={{ margin: '10px 0' }}>
-                            <button
-                                onClick={() => handleAnswerSelect(option)}
-                                disabled={selectedAnswer !== ""}
-                                className={`button ${selectedAnswer === option ? (option === currentQuestion.correctAnswer ? 'correctAnswer' : 'wrongAnswer') : ''}`}
-                            >
-                                {option}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+                <h2>Trivia Game</h2>
+                <p>Score: {score}</p>
+                <p>Timer: {timer}</p>
+                <p>Game Wager: {wager}</p>
+                <p>Question Number: {currentQuestionIndex + 1} of {triviaData.length}</p>
+                <div>
+                    <p>{currentQuestion.question}</p>
+                    <ul>
+                        {currentQuestion.options.map((option, index) => (
+                            <li key={index} style={{margin: '10px 0'}}>
+                                <button
+                                    onClick={() => handleAnswerSelect(option)}
+                                    disabled={selectedAnswer !== ""}
+                                    className={`button ${selectedAnswer === option ? (option === currentQuestion.correctAnswer ? 'correctAnswer' : 'wrongAnswer') : ''}`}
+                                >
+                                    {option}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
-        </div>
         </div>
     );
 }
 
 export default TriviaGamePage;
+
