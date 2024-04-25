@@ -61,7 +61,7 @@ function GameLobbyPage() {
 
     return (
         <div className="center-image">
-            <div className="image-overlay"></div>
+            <div className="image-overlay"></div>c
             <div>
                 <h2>Game Lobby</h2>
                 {gameCode && <p>Game Code: {gameCode}</p>}

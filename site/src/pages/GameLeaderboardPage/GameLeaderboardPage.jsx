@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { useLocation } from 'react-router-dom';
+import './GameLeaderboardPage.css';
+import leaderboardImage from './leaderboardTitle.png';
 
 function GameLeaderboardPage() {
     const location = useLocation();
@@ -98,10 +100,16 @@ function GameLeaderboardPage() {
     };
 
     return (
+      <div className="center-image">
         <div>
+        <img
+                    src={leaderboardImage}
+                    alt="Leaderboard"
+                    className="leaderboard-title"
+                />
             <h2>Leaderboard</h2>
             <p>Total Game Wager: ${wager * leaderboard.length}</p>
-            <ul style={{ listStyleType: 'none', paddingLeft: 0 }}>
+            <ul className="leaderboard-list">
                 {leaderboard.map(({ username, score, balance }, index) => (
                     <li key={username}>
                         {index + 1}. {username} - {score} points, Prize: ${prizeDistribution[index].toFixed(2)},
@@ -110,6 +118,8 @@ function GameLeaderboardPage() {
                 ))}
             </ul>
         </div>
+    </div>
+        
     );
 }
 
