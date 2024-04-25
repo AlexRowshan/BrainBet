@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
+import './GameLeaderboardPage.css';
+import leaderboardImage from './leaderboardTitle.png';
+
 
 function GameLeaderboardPage() {
     const [leaderboard, setLeaderboard] = useState([]);
@@ -74,15 +77,22 @@ function GameLeaderboardPage() {
     const prizeDistribution = calculatePrizeDistribution(leaderboard);
 
     return (
-        <div>
-            <h2>Leaderboard</h2>
-            <ul style={{ listStyleType: 'none', paddingLeft: 0 }}>
-                {leaderboard.map(({ username, score }, index) => (
-                    <li key={username}>
-                        {index + 1}. {username} - {score} points {prizeDistribution[index]}%
-                    </li>
-                ))}
-            </ul>
+        <div className="center-image">
+            <div>
+                <img
+                    src={leaderboardImage}
+                    alt="Leaderboard"
+                    className="leaderboard-title"
+                />
+
+                <ul className="leaderboard-list">
+                    {leaderboard.map(({username, score}, index) => (
+                        <li key={username}>
+                            {index + 1}. {username} - {score} points {prizeDistribution[index]}%
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 }
