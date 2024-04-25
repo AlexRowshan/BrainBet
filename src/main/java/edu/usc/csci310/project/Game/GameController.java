@@ -70,6 +70,7 @@ public class GameController {
         String gameCode = startGameRequest.getGameCode();
         String prompt = startGameRequest.getPrompt();
         String response = chatGptService.getTriviaQuestions(prompt);
+        float wager = startGameRequest.getWager();
         List<TriviaQuestion> questions = new ArrayList<>();
         String[] questionBlocks = response.split("Question: "); // Split by the start of each question
         for (String block : questionBlocks) {
@@ -87,14 +88,16 @@ public class GameController {
             question.setCorrectAnswer(correctAnswer);
             questions.add(question);
         }
-        messagingTemplate.convertAndSend("/topic/gameStart/" + gameCode, questions);
-
+        Map<String, Object> startMessage = new HashMap<>();
+        startMessage.put("questions", questions);
+        startMessage.put("wager", wager);
+        messagingTemplate.convertAndSend("/topic/gameStart/" + gameCode, startMessage);
     }
 
     public static class StartGameRequest {
         private String gameCode;
         private String prompt;
-
+        private float wager;
         public StartGameRequest() {
             // Default constructor
         }
@@ -118,10 +121,19 @@ public class GameController {
         public void setPrompt(String prompt) {
             this.prompt = prompt;
         }
+
+        public float getWager() {
+            return wager;
+        }
+
+        public void setWager(float wager) {
+            this.wager = wager;
+        }
     }
 
 
 
 }
+
 
 
