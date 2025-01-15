@@ -16,7 +16,7 @@ function GameLeaderboardPage() {
     useEffect(() => {
         console.log("Game wager:", wager);
         const gameCode = sessionStorage.getItem('gameCode');
-        const socket = new SockJS('https://localhost:8080/ws');
+        const socket = new SockJS('https://brainbet.onrender.com/ws');
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
             console.log('WebSocket connected');

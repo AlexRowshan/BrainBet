@@ -40,7 +40,7 @@ function GameJoinPage() {
     }, [wager]);
 
     const connect = () => {
-        const socket = new SockJS('https://localhost:8080/ws');
+        const socket = new SockJS('https://brainbet.onrender.com/ws');
         // Assign to current property of the ref
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, frame => {
