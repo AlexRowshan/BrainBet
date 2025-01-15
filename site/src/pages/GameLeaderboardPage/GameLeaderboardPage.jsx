@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './GameLeaderboardPage.css';
 import leaderboardImage from './leaderboardTitle.png';
 
 function GameLeaderboardPage() {
     const location = useLocation();
+    const navigate = useNavigate();
     const [leaderboard, setLeaderboard] = useState([]);
     const [prizeDistribution, setPrizeDistribution] = useState([]);
     const stompClient = useRef(null);
@@ -84,7 +85,6 @@ function GameLeaderboardPage() {
         return distribution;
     };
 
-
     const fetchAndUpdateBalances = async (leaderboard, distribution) => {
         const updatedLeaderboard = await Promise.all(leaderboard.map(async (user, index) => {
             const response = await fetch('/balance', {
@@ -99,27 +99,36 @@ function GameLeaderboardPage() {
         setLeaderboard(updatedLeaderboard);
     };
 
+    const handleBackToLobby = () => {
+        navigate('/GameJoinPage');
+    };
+
     return (
-      <div className="center-image">
-        <div>
-        <img
+        <div className="center-image">
+            <div>
+                <img
                     src={leaderboardImage}
                     alt="Leaderboard"
                     className="leaderboard-title"
                 />
-            <h2>Leaderboard</h2>
-            <p>Total Game Wager: ${wager * leaderboard.length}</p>
-            <ul className="leaderboard-list">
-                {leaderboard.map(({ username, score, balance }, index) => (
-                    <li key={username}>
-                        {index + 1}. {username} - {score} points, Prize: ${prizeDistribution[index].toFixed(2)},
-                        Balance: ${balance?.toFixed(2)}
-                    </li>
-                ))}
-            </ul>
+                <h2>Leaderboard</h2>
+                <p>Total Game Wager: ${wager * leaderboard.length}</p>
+                <ul className="leaderboard-list">
+                    {leaderboard.map(({ username, score, balance }, index) => (
+                        <li key={username}>
+                            {index + 1}. {username} - {score} points, Prize: ${prizeDistribution[index].toFixed(2)},
+                            Balance: ${(balance - wager).toFixed(2)}
+                        </li>
+                    ))}
+                </ul>
+                <button
+                    onClick={handleBackToLobby}
+                    className="back-to-lobby-button"
+                >
+                    Back to Lobby
+                </button>
+            </div>
         </div>
-    </div>
-        
     );
 }
 
