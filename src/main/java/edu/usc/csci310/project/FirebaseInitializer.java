@@ -20,14 +20,11 @@ public class FirebaseInitializer {
                 throw new IllegalStateException("FIREBASE_CONFIG environment variable not set");
             }
 
-            // Convert the environment variable content to InputStream
-            ByteArrayInputStream serviceAccount = new ByteArrayInputStream(firebaseConfig.getBytes());
-
-            FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .build();
-
             if (FirebaseApp.getApps().isEmpty()) {
+                ByteArrayInputStream serviceAccount = new ByteArrayInputStream(firebaseConfig.getBytes());
+                FirebaseOptions options = FirebaseOptions.builder()
+                        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                        .build();
                 FirebaseApp.initializeApp(options);
             }
         } catch (IOException e) {
