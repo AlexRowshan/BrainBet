@@ -1,12 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
+import { useLocation, useNavigate } from 'react-router-dom';
+import './GameLeaderboardPage.css';
+import leaderboardImage from './leaderboardTitle.png';
 
 function GameLeaderboardPage() {
+    const location = useLocation();
+    const navigate = useNavigate();
     const [leaderboard, setLeaderboard] = useState([]);
+    const [prizeDistribution, setPrizeDistribution] = useState([]);
     const stompClient = useRef(null);
+    const { wager } = location.state || {};
 
     useEffect(() => {
+        console.log("Game wager:", wager);
         const gameCode = sessionStorage.getItem('gameCode');
         const socket = new SockJS('http://localhost:8080/ws');
         stompClient.current = Stomp.over(socket);
@@ -14,19 +22,16 @@ function GameLeaderboardPage() {
             console.log('WebSocket connected');
             const leaderboardTopic = `/topic/leaderboard/${gameCode}`;
             stompClient.current.subscribe(leaderboardTopic, (message) => {
-                console.log('I am here');
                 const scoreData = JSON.parse(message.body);
-                console.log('Received score data:', scoreData);
                 setLeaderboard((prevLeaderboard) => {
                     const newLeaderboard = [...prevLeaderboard, scoreData];
                     newLeaderboard.sort((a, b) => b.score - a.score);
+                    const prizeDistribution = calculatePrizeDistribution(newLeaderboard, wager);
+                    setPrizeDistribution(prizeDistribution);
+                    fetchAndUpdateBalances(newLeaderboard, prizeDistribution);
                     return newLeaderboard;
                 });
-            }, (error) => {
-                console.error('WebSocket subscription error:', error);
             });
-        }, (error) => {
-            console.error('WebSocket connection error:', error);
         });
 
         return () => {
@@ -38,51 +43,91 @@ function GameLeaderboardPage() {
     }, []);
 
     const calculatePrizeDistribution = (leaderboard) => {
-        const prizes = [50, 30, 20]; // Prizes for 1st, 2nd, and 3rd
-        const distribution = new Array(leaderboard.length).fill(0); // Start with 0% for everyone
-        let currentPrizeIndex = 0; // Start with the top prize
+        const prizes = [50, 30, 20]; // Percentage for 1st, 2nd, and 3rd
+        const totalWager = wager * leaderboard.length; // Total wager
+        const distribution = new Array(leaderboard.length).fill(0); // Start with 0 for everyone
 
-        // Create a structure to hold groups of same scores
+        // Group by score
         const scoreGroups = leaderboard.reduce((acc, curr) => {
-            if (acc.length === 0 || acc[acc.length - 1].score !== curr.score) {
-                acc.push({ score: curr.score, users: [curr], prizeIndex: currentPrizeIndex });
-                currentPrizeIndex++; // Move to the next prize
-            } else {
-                acc[acc.length - 1].users.push(curr);
+            let group = acc.find(g => g.score === curr.score);
+            if (!group) {
+                group = { score: curr.score, users: [] };
+                acc.push(group);
             }
+            group.users.push(curr);
             return acc;
         }, []);
 
-        // Now distribute the prizes for each group
+        // Sort groups by score descending
+        scoreGroups.sort((a, b) => b.score - a.score);
+
+        // Allocate prizes based on groups
+        let prizeIndex = 0;
         scoreGroups.forEach(group => {
-            if (group.prizeIndex < 3) { // Only distribute if within the top 3 prizes
-                const totalPrizeForGroup = group.users.length > 1
-                    ? prizes.slice(group.prizeIndex, group.prizeIndex + group.users.length).reduce((a, b) => a + b, 0)
-                    : prizes[group.prizeIndex];
-                const prizePerUser = totalPrizeForGroup / group.users.length;
-                group.users.forEach(user => {
-                    const userIndex = leaderboard.findIndex(u => u.username === user.username);
-                    distribution[userIndex] = prizePerUser;
-                });
-            }
+            if (prizeIndex >= prizes.length) return; // No more prizes to distribute
+
+            // Calculate the sum of prizes for the number of tied positions
+            const prizeSum = prizes.slice(prizeIndex, prizeIndex + group.users.length)
+                .reduce((sum, prize) => sum + prize, 0);
+            const totalPrizeForGroup = totalWager * (prizeSum / 100);
+            const prizePerUser = totalPrizeForGroup / group.users.length;
+
+            // Assign the prize to each user in this group
+            group.users.forEach(user => {
+                const index = leaderboard.findIndex(u => u.username === user.username);
+                distribution[index] = prizePerUser;
+            });
+
+            // Move the prizeIndex by the number of users in the group
+            prizeIndex += group.users.length;
         });
 
         return distribution;
     };
 
+    const fetchAndUpdateBalances = async (leaderboard, distribution) => {
+        const updatedLeaderboard = await Promise.all(leaderboard.map(async (user, index) => {
+            const response = await fetch('/balance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: user.username })
+            });
+            const currentBalance = await response.json();
+            const newBalance = currentBalance + distribution[index];
+            return { ...user, balance: newBalance };
+        }));
+        setLeaderboard(updatedLeaderboard);
+    };
 
-    const prizeDistribution = calculatePrizeDistribution(leaderboard);
+    const handleBackToLobby = () => {
+        navigate('/GameJoinPage');
+    };
 
     return (
-        <div>
-            <h2>Leaderboard</h2>
-            <ul style={{ listStyleType: 'none', paddingLeft: 0 }}>
-                {leaderboard.map(({ username, score }, index) => (
-                    <li key={username}>
-                        {index + 1}. {username} - {score} points {prizeDistribution[index]}%
-                    </li>
-                ))}
-            </ul>
+        <div className="center-image">
+            <div>
+                <img
+                    src={leaderboardImage}
+                    alt="Leaderboard"
+                    className="leaderboard-title"
+                />
+                <h2>Leaderboard</h2>
+                <p>Total Game Wager: ${wager * leaderboard.length}</p>
+                <ul className="leaderboard-list">
+                    {leaderboard.map(({ username, score, balance }, index) => (
+                        <li key={username}>
+                            {index + 1}. {username} - {score} points, Prize: ${prizeDistribution[index].toFixed(2)},
+                            Balance: ${(balance - wager).toFixed(2)}
+                        </li>
+                    ))}
+                </ul>
+                <button
+                    onClick={handleBackToLobby}
+                    className="back-to-lobby-button"
+                >
+                    Back to Lobby
+                </button>
+            </div>
         </div>
     );
 }

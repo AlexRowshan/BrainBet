@@ -11,7 +11,7 @@ function GameLobbyPage() {
     const [prompt, setPrompt] = useState("");
     const navigate = useNavigate();
     const stompClient = useRef(null);
-    
+
 
     function getShadeOfPurple(index, totalParticipants) {
         const hue = 260 + (30 * index / totalParticipants) % 30; // Keeping hue within a tighter purple range
@@ -28,8 +28,10 @@ function GameLobbyPage() {
             const gameStartTopic = `/topic/gameStart/${gameCode}`;
             sessionStorage.setItem('gameCode', gameCode);
             stompClient.current.subscribe(gameStartTopic, (message) => {
-                const triviaData = JSON.parse(message.body);
-                navigate("/triviaGamePage", { state: { triviaData } });
+                const data = JSON.parse(message.body);
+                const triviaData = data.questions;
+                const wager = data.wager;
+                navigate("/triviaGamePage", { state: { triviaData, wager } });
             });
         });
 
@@ -50,7 +52,8 @@ function GameLobbyPage() {
         if (stompClient.current) {
             const payload = JSON.stringify({
                 gameCode: gameCode,
-                prompt: prompt
+                prompt: prompt,
+                wager: wager
             });
             stompClient.current.send("/app/startGame", {}, payload);
         }
@@ -58,7 +61,7 @@ function GameLobbyPage() {
 
     return (
         <div className="center-image">
-            <div className="image-overlay"></div>
+            <div className="image-overlay"></div>c
             <div>
                 <h2>Game Lobby</h2>
                 {gameCode && <p>Game Code: {gameCode}</p>}
