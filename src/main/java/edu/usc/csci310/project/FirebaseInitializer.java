@@ -6,26 +6,32 @@ import com.google.firebase.FirebaseOptions;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
-//the FirebaseInitializer class configures and initializes Firebase using service account credentials, ensuring that Firebase services are available for use throughout the Spring Boot application.
 @Service
 public class FirebaseInitializer {
-
-    private FileInputStream serviceAccount;
-    private FirebaseOptions options;
 
     @PostConstruct
     public void initialize() {
         try {
-            serviceAccount = new FileInputStream("src/main/resources/serviceAccountKey.json");
-            options = new FirebaseOptions.Builder()
+            String firebaseConfig = System.getenv("FIREBASE_CONFIG");
+            if (firebaseConfig == null || firebaseConfig.isEmpty()) {
+                throw new IllegalStateException("FIREBASE_CONFIG environment variable not set");
+            }
+
+            // Convert the environment variable content to InputStream
+            ByteArrayInputStream serviceAccount = new ByteArrayInputStream(firebaseConfig.getBytes());
+
+            FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
 
-            FirebaseApp.initializeApp(options);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            if (FirebaseApp.getApps().isEmpty()) {
+                FirebaseApp.initializeApp(options);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error initializing Firebase", e);
         }
     }
 }
