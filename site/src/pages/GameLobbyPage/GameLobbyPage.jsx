@@ -22,7 +22,7 @@ function GameLobbyPage() {
 
 
     useEffect(() => {
-        const socket = new SockJS('http://localhost:8080/ws');
+        const socket = new SockJS('https://localhost:8080/ws');
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
             const gameStartTopic = `/topic/gameStart/${gameCode}`;

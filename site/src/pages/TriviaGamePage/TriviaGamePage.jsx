@@ -48,7 +48,7 @@ function TriviaGamePage() {
                 };
 
                 // Establish WebSocket connection and send game result data
-                const socket = new SockJS('http://localhost:8080/ws');
+                const socket = new SockJS('https://localhost:8080/ws');
                 const stompClient = Stomp.over(socket);
                 stompClient.connect({}, () => {
                     console.log('WebSocket connected in TriviaGamePage');
