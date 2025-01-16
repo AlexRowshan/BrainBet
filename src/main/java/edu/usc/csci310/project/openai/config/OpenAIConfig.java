@@ -6,14 +6,17 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class OpenAIConfig {
-    //TODO: fix application properties
-    private final String openApiKey = "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";
 
     @Bean
-    public RestTemplate template(){
+    public RestTemplate template() {
+        String openApiKey = System.getenv("OPENAI_API_KEY");
+        if (openApiKey == null || openApiKey.isEmpty()) {
+            throw new IllegalStateException("OPENAI_API_KEY environment variable is not set");
+        }
+
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getInterceptors().add((request, body, execution) ->{
-            request.getHeaders().add("Authorization", "Bearer "+openApiKey);
+        restTemplate.getInterceptors().add((request, body, execution) -> {
+            request.getHeaders().add("Authorization", "Bearer " + openApiKey);
             return execution.execute(request, body);
         });
         return restTemplate;
