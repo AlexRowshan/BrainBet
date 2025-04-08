@@ -8,7 +8,6 @@ input, button, select, textarea {
     font-family: 'LocalFontName', "Broken Console";
 }
 
-
 html, body {
     font-family: 'LocalFontName', "Broken Console";
     height: 100%;
@@ -45,10 +44,9 @@ html, body {
 }
 
 input::placeholder {
-    color: #FFFFFF;
+    color: rgba(255, 255, 255, 0.7);
     opacity: 1;
 }
-
 
 .input {
     justify-content: center;
@@ -59,76 +57,66 @@ input::placeholder {
     flex-direction: column;
     align-items: center;
     width: 350px;
-    /*height: 80px;*/
     border-radius: 10px;
-    margin: 10px 0;
+    margin: 15px 0;
     z-index: 2;
 }
-
 
 .input input {
     width: 100%;
     border-radius: 30px;
     color: #ffffff;
     font-size: 19px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    padding: 12px 20px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-    /*opacity: 0.5;*/
-    outline: none;
-    border: none;
+    padding: 15px 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
 }
 
-
-
-.input input:focus{
+.input input:focus {
     outline: none;
-
+    border-color: rgba(186, 0, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(186, 0, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
 }
+
 .submit-container {
     display: flex;
     justify-content: center;
+    gap: 20px;
     padding-top: 40px;
     z-index: 2;
     margin-top: 20px;
 }
 
-
-
 .submit {
     font-weight: bold;
     cursor: pointer;
-    padding: 10px 20px;
+    padding: 15px 30px;
     color: white;
     border-radius: 30px;
     font-size: 20px;
-    transition: background-color 0.3s;
-    background-color: rgba(168, 44, 242, 0.57);
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, rgba(186, 0, 255, 0.8), rgba(168, 44, 242, 0.8));
     border: none;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    min-width: 150px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .submit:hover {
-    background-color: rgba(0, 0, 0, 0.25);
-    outline: 2px solid #A82CF2;
-
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, rgba(186, 0, 255, 0.9), rgba(168, 44, 242, 0.9));
 }
-
 
 .header .text, .header .underline {
     text-align: center;
 }
-
-/*.header .underline {*/
-/*    height: 2px;*/
-/*    width: 60px;*/
-/*    border-radius: 9px;*/
-/*    background-color: #e600e2;*/
-/*}*/
-
 
 .center-image {
     position: absolute;
@@ -151,16 +139,14 @@ input[type="text"]#joinpagetextbox::placeholder {
     opacity: 1; /* Ensures the placeholder is fully opaque */
 }
 
-
 .background-container {
-    width: 100vw;  /* Adding padding while considering the full viewport width */
-    height: 100vh; /* Same for height */
+    width: 100vw;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative; /* Needed for absolute positioning inside */
-    padding: 20px;  /* Padding around the outer container */
-
+    position: relative;
+    padding: 20px;
 }
 

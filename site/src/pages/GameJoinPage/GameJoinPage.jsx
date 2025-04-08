@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SockJS from 'sockjs-client';
@@ -40,7 +39,7 @@ function GameJoinPage() {
     }, [wager]);
 
     const connect = () => {
-        const socket = new SockJS('https://brainbet.onrender.com/ws');
+        const socket = new SockJS('http://localhost:8080/ws');
         // Assign to current property of the ref
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, frame => {

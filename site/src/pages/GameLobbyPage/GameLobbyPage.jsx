@@ -4,7 +4,6 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import './GameLobbyPage.css';
 
-
 function GameLobbyPage() {
     const location = useLocation();
     const { gameCode, participants, wager } = location.state || {};
@@ -12,17 +11,15 @@ function GameLobbyPage() {
     const navigate = useNavigate();
     const stompClient = useRef(null);
 
-
     function getShadeOfPurple(index, totalParticipants) {
-        const hue = 260 + (30 * index / totalParticipants) % 30; // Keeping hue within a tighter purple range
-        const saturation = 50 + 10 * (index % 5); // Subtle changes in saturation
-        const lightness = 30 + 10 * (index % 7); // More subtle gradient in lightness
+        const hue = 260 + (30 * index / totalParticipants) % 30;
+        const saturation = 50 + 10 * (index % 5);
+        const lightness = 30 + 10 * (index % 7);
         return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
     }
 
-
     useEffect(() => {
-        const socket = new SockJS('https://brainbet.onrender.com/ws');
+        const socket = new SockJS('http://localhost:8080/ws');
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
             const gameStartTopic = `/topic/gameStart/${gameCode}`;
@@ -61,33 +58,53 @@ function GameLobbyPage() {
 
     return (
         <div className="center-image">
-            <div className="image-overlay"></div>c
-            <div>
-                <h2>Game Lobby</h2>
-                {gameCode && <p>Game Code: {gameCode}</p>}
-                <h3>Participants:</h3>
-                <ul className="participants-container">
-                    {participants && participants.map((participant, index) => (
-                        <li key={index}>
-                            <div className="participant-icon"
-                                 style={{backgroundColor: getShadeOfPurple(index, participants.length)}}>
-                                {participant}
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+            <div className="image-overlay"></div>
+            <div className="lobby-container">
+                <div className="game-info">
+                    <h1 className="lobby-title">Game Lobby</h1>
+                    <div className="game-code">
+                        <span className="label">Game Code:</span>
+                        <span className="value">{gameCode}</span>
+                    </div>
+                    <div className="game-wager">
+                        <span className="label">Wager:</span>
+                        <span className="value">${wager}</span>
+                    </div>
+                </div>
 
+                <div className="participants-section">
+                    <h2 className="section-title">Players</h2>
+                    <div className="participants-grid">
+                        {participants && participants.map((participant, index) => (
+                            <div key={index} className="participant-card">
+                                <div className="participant-icon"
+                                     style={{backgroundColor: getShadeOfPurple(index, participants.length)}}>
+                                    {participant}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
                 {isHost && (
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Enter a prompt"
-                            value={prompt}
-                            onChange={handlePromptChange}
-                            className="input-prompt"
-                        />
-                        <button onClick={handleStartGame} className="button-start-game">Start Game</button>
+                    <div className="host-controls">
+                        <div className="prompt-section">
+                            <h2 className="section-title">Game Settings</h2>
+                            <input
+                                type="text"
+                                placeholder="Enter a topic for the trivia game..."
+                                value={prompt}
+                                onChange={handlePromptChange}
+                                className="input-prompt"
+                            />
+                            <button 
+                                onClick={handleStartGame} 
+                                className="button-start-game"
+                                disabled={!prompt.trim()}
+                            >
+                                Start Game
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>

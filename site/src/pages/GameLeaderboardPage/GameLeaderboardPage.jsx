@@ -16,7 +16,7 @@ function GameLeaderboardPage() {
     useEffect(() => {
         console.log("Game wager:", wager);
         const gameCode = sessionStorage.getItem('gameCode');
-        const socket = new SockJS('https://brainbet.onrender.com/ws');
+        const socket = new SockJS('http://localhost:8080/ws');
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
             console.log('WebSocket connected');
@@ -105,22 +105,36 @@ function GameLeaderboardPage() {
 
     return (
         <div className="center-image">
-            <div>
+            <div className="image-overlay"></div>
+            <div className="leaderboard-container">
                 <img
                     src={leaderboardImage}
                     alt="Leaderboard"
                     className="leaderboard-title"
                 />
-                <h2>Leaderboard</h2>
-                <p>Total Game Wager: ${wager * leaderboard.length}</p>
-                <ul className="leaderboard-list">
-                    {leaderboard.map(({ username, score, balance }, index) => (
-                        <li key={username}>
-                            {index + 1}. {username} - {score} points, Prize: ${prizeDistribution[index].toFixed(2)},
-                            Balance: ${(balance - wager).toFixed(2)}
-                        </li>
-                    ))}
-                </ul>
+                <div className="game-info">
+                    <h2 className="total-wager">Total Game Wager: ${wager * leaderboard.length}</h2>
+                </div>
+                <div className="leaderboard-content">
+                    <div className="leaderboard-header">
+                        <span className="rank">Rank</span>
+                        <span className="player">Player</span>
+                        <span className="score">Score</span>
+                        <span className="prize">Prize</span>
+                        <span className="balance">Balance</span>
+                    </div>
+                    <ul className="leaderboard-list">
+                        {leaderboard.map(({ username, score, balance }, index) => (
+                            <li key={username} className={`leaderboard-item ${index < 3 ? `rank-${index + 1}` : ''}`}>
+                                <span className="rank">{index + 1}</span>
+                                <span className="player">{username}</span>
+                                <span className="score">{score} pts</span>
+                                <span className="prize">${prizeDistribution[index].toFixed(2)}</span>
+                                <span className="balance">${(balance - wager).toFixed(2)}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
                 <button
                     onClick={handleBackToLobby}
                     className="back-to-lobby-button"

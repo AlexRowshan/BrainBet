@@ -4,7 +4,6 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import './TriviaGamePage.css';
 
-
 function TriviaGamePage() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -12,18 +11,18 @@ function TriviaGamePage() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
     const [timer, setTimer] = useState(10);
-    const [selectedAnswer, setSelectedAnswer] = useState(""); // Track the selected answer
+    const [selectedAnswer, setSelectedAnswer] = useState("");
+    const [showCorrectAnswer, setShowCorrectAnswer] = useState(false);
 
     useEffect(() => {
-        // Reset selected answer and timer for each question
         setSelectedAnswer("");
+        setShowCorrectAnswer(false);
         setTimer(10);
-        console.log("Current question index is " + currentQuestionIndex);
 
         const countdown = setInterval(() => {
             setTimer((prevTimer) => {
                 if (prevTimer === 1) {
-                    clearInterval(countdown); // Clear interval when timer is about to reach 0
+                    clearInterval(countdown);
                     return 0;
                 }
                 return prevTimer - 1;
@@ -35,9 +34,12 @@ function TriviaGamePage() {
 
     useEffect(() => {
         if (timer === 0) {
+            setShowCorrectAnswer(true);
             const nextQuestionIndex = currentQuestionIndex + 1;
             if (nextQuestionIndex < triviaData.length) {
-                setCurrentQuestionIndex(nextQuestionIndex);
+                setTimeout(() => {
+                    setCurrentQuestionIndex(nextQuestionIndex);
+                }, 2000);
             } else {
                 const gameCode = sessionStorage.getItem('gameCode');
                 const username = sessionStorage.getItem('username');
@@ -47,8 +49,7 @@ function TriviaGamePage() {
                     score: score,
                 };
 
-                // Establish WebSocket connection and send game result data
-                const socket = new SockJS('https://brainbet.onrender.com/ws');
+                const socket = new SockJS('http://localhost:8080/ws');
                 const stompClient = Stomp.over(socket);
                 stompClient.connect({}, () => {
                     console.log('WebSocket connected in TriviaGamePage');
@@ -63,44 +64,73 @@ function TriviaGamePage() {
     }, [timer]);
 
     const handleAnswerSelect = (option) => {
-        setSelectedAnswer(option); // Mark the answer as selected
+        if (selectedAnswer) return; // Prevent multiple selections
+        setSelectedAnswer(option);
+        setShowCorrectAnswer(true);
         const currentQuestion = triviaData[currentQuestionIndex];
         if (option === currentQuestion.correctAnswer) {
-            setScore(score + 1); // Increment score for correct answer
+            setScore(score + 1);
         }
-        // Optionally wait for the timer to expire to automatically move to the next question
     };
 
-    if (!triviaData.length) {
-        return <div>No trivia data found. Please start the game properly.</div>;
+    if (!triviaData || !triviaData.length) {
+        return <div className="error-message">No trivia data found. Please start the game properly.</div>;
     }
 
     const currentQuestion = triviaData[currentQuestionIndex];
 
     return (
-        <div className="center-image-trivia">
-            <div>
-                <h2>Trivia Game</h2>
-                <p>Score: {score}</p>
-                <p>Timer: {timer}</p>
-                <p>Game Wager: {wager}</p>
-                <p>Question Number: {currentQuestionIndex + 1} of {triviaData.length}</p>
-                <div>
-                    <p>{currentQuestion.question}</p>
-                    <ul>
-                        {currentQuestion.options.map((option, index) => (
-                            <li key={index} style={{margin: '10px 0'}}>
-                                <button
-                                    onClick={() => handleAnswerSelect(option)}
-                                    disabled={selectedAnswer !== ""}
-                                    className={`button ${selectedAnswer === option ? (option === currentQuestion.correctAnswer ? 'correctAnswer' : 'wrongAnswer') : ''}`}
-                                >
-                                    {option}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
+        <div className="trivia-container">
+            <div className="game-header">
+                <div className="game-stats">
+                    <div className="stat-box">
+                        <span className="stat-label">Score</span>
+                        <span className="stat-value">{score}</span>
+                    </div>
+                    <div className="stat-box">
+                        <span className="stat-label">Timer</span>
+                        <span className="stat-value">{timer}s</span>
+                    </div>
+                    <div className="stat-box">
+                        <span className="stat-label">Wager</span>
+                        <span className="stat-value">${wager}</span>
+                    </div>
+                    <div className="stat-box">
+                        <span className="stat-label">Question</span>
+                        <span className="stat-value">{currentQuestionIndex + 1}/{triviaData.length}</span>
+                    </div>
                 </div>
+            </div>
+
+            <div className="question-container">
+                <h2 className="question-text">{currentQuestion.question}</h2>
+                <div className="options-container">
+                    {currentQuestion.options.map((option, index) => (
+                        <button
+                            key={index}
+                            onClick={() => handleAnswerSelect(option)}
+                            disabled={selectedAnswer !== ""}
+                            className={`option-button ${
+                                selectedAnswer === option
+                                    ? option === currentQuestion.correctAnswer
+                                        ? 'correct'
+                                        : 'incorrect'
+                                    : showCorrectAnswer && option === currentQuestion.correctAnswer
+                                        ? 'correct-answer'
+                                        : ''
+                            }`}
+                        >
+                            {option}
+                        </button>
+                    ))}
+                </div>
+                {showCorrectAnswer && (
+                    <div className="answer-feedback">
+                        {selectedAnswer === currentQuestion.correctAnswer
+                            ? "Correct! 🎉"
+                            : `Incorrect. The correct answer was: ${currentQuestion.correctAnswer}`}
+                    </div>
+                )}
             </div>
         </div>
     );
