@@ -49,7 +49,7 @@ function TriviaGamePage() {
                     score: score,
                 };
 
-                const socket = new SockJS('http://localhost:8080/ws');
+                const socket = new SockJS('https://brainbet.onrender.com/ws');
                 const stompClient = Stomp.over(socket);
                 stompClient.connect({}, () => {
                     console.log('WebSocket connected in TriviaGamePage');
