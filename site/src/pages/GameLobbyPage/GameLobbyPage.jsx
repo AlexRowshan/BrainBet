@@ -19,7 +19,7 @@ function GameLobbyPage() {
     }
 
     useEffect(() => {
-        const socket = new SockJS('https://brainbet-2-0.onrender.com/ws');
+        const socket = new SockJS('https://brainbet-2-0.onrender.com/ws', null, { transports: ['websocket'] });
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
             const gameStartTopic = `/topic/gameStart/${gameCode}`;
